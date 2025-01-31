@@ -98,6 +98,7 @@ class Tree{
             return null
         }
     }
+
     levelOrder(callback, node=this.root){
         let queue = []
         function addToQueue(queue, node){
@@ -136,8 +137,83 @@ class Tree{
         }
         levelSearch(callback, node)
       
+    }
 
 
+    preOrder(callback, node=this.root){
+        if (!callback){
+            throw new Error("Missing callback parameter!")
+        }
+        if (node == undefined){
+            return
+        } else {
+            callback(node)
+            this.preOrder(callback, node.left)
+            this.preOrder(callback, node.right)
+        }
+    }
+    inOrder(callback, node=this.root){
+    if (!callback){
+        throw new Error("Missing callback parameter!")
+    } if (node == null){
+        return
+    } else {
+        this.inOrder(callback, node.left)
+        callback(node)
+        this.inOrder(callback, node.right)
+    }
+    
+    }
+    countNode(count){
+        if (node != null){
+            count += 1
+        }
+        return count
+    }
+    depth(value, depth, node=this.root){
+            console.log(`Searching ${node.value}`)
+            if (value == node.value){
+                return depth
+            } else if (node.value > value && node.left != undefined) {
+                depth =+ 1
+                return this.depth(value, height, node.left)
+            } else if (node.value < value && node.right != undefined) {
+                depth =+ 1
+                return this.depth(value, height, node.right)
+            } else {
+                return null
+            }
+        }
+    height(value){
+        let root = this.find(value)
+        function searchHelper(height=0,node=root){
+            if (node == null){
+                return -1
+            }
+            let leftTree = searchHelper(height, node.left)
+            let rightTree = searchHelper(height, node.right)
+            if (leftTree > rightTree || rightTree == undefined){
+                return leftTree + 1
+            } else if (rightTree > leftTree || leftTree == undefined){
+                return rightTree + 1
+            } else if (rightTree == leftTree){
+                return rightTree + 1
+            }
+
+        }
+        return searchHelper(0, root)
+
+    }
+    postOrder(callback, node=this.root){
+    if (!callback){
+        throw new Error("Missing callback parameter!")
+    } if (node == null){
+        return
+    } else {
+        this.postOrder(callback, node.left)
+        this.postOrder(callback, node.right)
+        callback(node)
+    }
     }
     prettyPrint(node=this.root, prefix="", isLeft = true){
         if (node === null) {
@@ -159,5 +235,11 @@ console.log(test.root)
 test.prettyPrint()
 test.find(324)
 test.deleteItem(67)
+test.insert(6)
 test.prettyPrint()
-test.levelOrder(test.printValue)
+// test.preOrder(test.printValue)
+test.inOrder(test.printValue)
+
+console.log(test.height(8))
+
+//test.postOrder(test.printValue)
