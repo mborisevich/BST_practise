@@ -6,8 +6,15 @@ class Node{
     }
 }
 class Tree{
-    constructor(array){
-        this.array = array
+    constructor(tree=[]){
+        this.array = tree
+        this.root = this.buildTree(this.array)
+    }
+    saveToArray = (node) =>{
+        this.array.push(node.value)
+    }
+    rebalance(node=this.root, array=this.array){
+        this.preOrder(this.saveToArray, node)
         this.root = this.buildTree(array)
     }
     sortArrayToBST(array, start=0, end){
@@ -202,8 +209,19 @@ class Tree{
 
         }
         return searchHelper(0, root)
+    }
+    isBalanced(node=this.root){
+        let leftTree = this.height(node.left.value)
+        let rightTree = this.height(node.right.value)
+        if (Math.abs(leftTree - rightTree) <= 1){
+            console.log(leftTree - rightTree)
+            console.log("The tree is balanced")
+        } else {
+            console.log("The tree is unbalanced")
+        }
 
     }
+
     postOrder(callback, node=this.root){
     if (!callback){
         throw new Error("Missing callback parameter!")
@@ -228,18 +246,28 @@ class Tree{
         }
       };
 }
-const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
-const test = new Tree(array)
-console.log(test.root)
-console.log(test.root)
-test.prettyPrint()
-test.find(324)
-test.deleteItem(67)
-test.insert(6)
-test.prettyPrint()
-// test.preOrder(test.printValue)
-test.inOrder(test.printValue)
-
-console.log(test.height(8))
-
+function driverScript() {
+    let randomArray = []
+    while (randomArray.length < 12){
+        randomArray.push(Math.floor(Math.random()*100))
+    }
+    randomTree = new Tree(randomArray)
+    randomTree.isBalanced()
+    randomTree.prettyPrint()
+    randomTree.postOrder(randomTree.printValue)
+    randomTree.inOrder(randomTree.printValue)
+    randomTree.postOrder(randomTree.printValue)
+    for (let i = 0; i < 20; i++){
+        randomTree.insert(Math.floor(Math.random()*1000))
+    }
+    randomTree.isBalanced()
+    randomTree.prettyPrint()
+    randomTree.rebalance()
+    randomTree.postOrder(randomTree.printValue)
+    randomTree.inOrder(randomTree.printValue)
+    randomTree.postOrder(randomTree.printValue)
+    randomTree.isBalanced()
+    randomTree.prettyPrint()
+}
+driverScript()
 //test.postOrder(test.printValue)
